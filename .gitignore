@@ -2,3 +2,6 @@ build/
 .cache/
 *.dSYM/
 .DS_Store
+.vscode
+third_party/*
+!third_party/README.md
