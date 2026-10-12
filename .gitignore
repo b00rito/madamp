@@ -1,0 +1,4 @@
+build/
+.cache/
+*.dSYM/
+.DS_Store
