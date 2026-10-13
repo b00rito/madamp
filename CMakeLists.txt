@@ -29,7 +29,12 @@ endif()
 
 message(STATUS "LIEF ${LIEF_VERSION}: ${LIEF_DIR}")
 
-add_executable(madamp src/main.cpp)
+add_executable(madamp
+    src/main.cpp
+    src/Architecture.cpp
+    src/Dump.cpp
+    src/Format.cpp
+)
 target_link_libraries(madamp PRIVATE LIEF::LIEF)
 target_compile_options(madamp PRIVATE -Wall -Wextra -Wpedantic)
 

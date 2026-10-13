@@ -1,7 +1,4 @@
-// madamp: a Mach-O dumper built on LIEF.
-//
-// Step 1: the skeleton. Read one file name from the command line, let
-// LIEF parse it, and say how many architecture slices it has.
+#include "Dump.h"
 
 #include <LIEF/MachO.hpp>
 
@@ -30,7 +27,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::cout << path << ": " << fat->size() << " slice(s)\n";
+    madamp::printSlices(*fat);
 
     return 0;
 }
