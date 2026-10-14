@@ -37,6 +37,10 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
         dumpHeader(binary, style);
     }
 
+    if (options.getShowCommands()) {
+        dumpCommands(binary, style);
+    }
+
     return true;
 }
 
