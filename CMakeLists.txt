@@ -35,6 +35,7 @@ add_executable(madamp
     src/Dump.cpp
     src/Error.cpp
     src/Format.cpp
+    src/Options.cpp
 )
 target_link_libraries(madamp PRIVATE LIEF::LIEF)
 target_compile_options(madamp PRIVATE -Wall -Wextra -Wpedantic)

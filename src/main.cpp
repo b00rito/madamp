@@ -1,6 +1,8 @@
+#include "Architecture.h"
 #include "Dump.h"
 #include "Error.h"
 #include "ExitCode.h"
+#include "Options.h"
 
 #include <LIEF/MachO.hpp>
 #include <LIEF/logging.hpp>
@@ -8,20 +10,34 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
 int main(int argc, char** argv)
 {
     const std::vector<std::string> arguments(argv + 1, argv + argc);
+    std::optional<madamp::Options> options = madamp::Options::parse(arguments);
 
-    if (arguments.size() != 1) {
-        std::cerr << "usage: madamp <mach-o file>\n";
+    if (!options) {
+        madamp::printUsage(std::cerr);
 
         return madamp::toInt(madamp::ExitCode::UsageFailure);
     }
 
-    const std::string& path = arguments.front();
+    if (options->getShowHelp()) {
+        madamp::printUsage(std::cout);
+
+        return madamp::toInt(madamp::ExitCode::Success);
+    }
+
+    if (options->getShowVersion()) {
+        std::cout << "madamp " << madamp::version << '\n';
+
+        return madamp::toInt(madamp::ExitCode::Success);
+    }
+
+    const std::string& path = options->getPath();
 
     // disable LIEF logging; use ours
     LIEF::logging::disable();
