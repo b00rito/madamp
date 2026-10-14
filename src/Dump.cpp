@@ -15,13 +15,11 @@ namespace madamp {
 void printSlices(const LIEF::MachO::FatBinary& fat, const Style& style)
 {
     if (fat.size() == 1) {
-        std::cout << "[*] Mach-O, " << archName(*fat.at(0)) << '\n';
         std::cout << "[*] " << style.bold() << "Mach-O, " << archName(*fat.at(0)) << style.reset() << '\n';
 
         return;
     }
 
-    std::cout << "[*] Universal binary with " << fat.size() << " slices:\n";
     std::cout << "[*] " << style.bold() << "Universal binary with " << fat.size() << " slices:" << style.reset() << '\n';
 
     // FatBinary can be iterated as a container of Binaries, one per slice.
@@ -32,7 +30,6 @@ void printSlices(const LIEF::MachO::FatBinary& fat, const Style& style)
 
 bool dumpSlice(const LIEF::MachO::Binary& binary, const Options&, const Style& style)
 {
-    std::cout << "\n### " << archName(binary) << " ###\n";
     std::cout << '\n' << style.bold() << style.green() << "### " << archName(binary) << " ###" << style.reset() << '\n';
 
     return true;
