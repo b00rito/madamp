@@ -60,7 +60,26 @@ int main(int argc, char** argv)
 
     madamp::printSlices(*fat);
 
-    return madamp::toInt(madamp::ExitCode::Success);
+    bool matched = false;
+    bool succeeded = true;
+
+    for (const LIEF::MachO::Binary& binary : *fat) {
+        if (!options->includesArch(madamp::archName(binary))) {
+            continue;
+        }
+
+        matched = true;
+
+        if (!madamp::dumpSlice(binary, *options)) {
+            succeeded = false;
+        }
+    }
+
+    if (!matched) {
+        return madamp::fail("no slice matching --arch " + options->getArch(), path);
+    }
+
+    return madamp::toInt(succeeded ? madamp::ExitCode::Success : madamp::ExitCode::InputFailure);
 }
 
 // EOF

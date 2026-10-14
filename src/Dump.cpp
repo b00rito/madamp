@@ -2,6 +2,7 @@
 
 #include "Architecture.h"
 #include "Format.h"
+#include "Options.h"
 
 #include <LIEF/MachO/Binary.hpp>
 #include <LIEF/MachO/FatBinary.hpp>
@@ -24,6 +25,13 @@ void printSlices(const LIEF::MachO::FatBinary& fat)
     for (const LIEF::MachO::Binary& binary : fat) {
         std::cout << "    - " << archName(binary) << " at file offset " << hex(binary.fat_offset()) << '\n';
     }
+}
+
+bool dumpSlice(const LIEF::MachO::Binary& binary, const Options&)
+{
+    std::cout << "\n### " << archName(binary) << " ###\n";
+
+    return true;
 }
 
 } // namespace madamp
