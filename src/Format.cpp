@@ -5,10 +5,8 @@
 
 namespace madamp {
 
-// std::to_chars (C++17) writes the digits into a buffer we provide and
-// returns where it stopped; 16 hex digits fit any 64-bit value.
-std::string
-hex(std::uint64_t value)
+// 16 hex digits fit any 64-bit value.
+std::string hex(std::uint64_t value)
 {
     std::array<char, 16> digits {};
     auto result = std::to_chars(digits.data(), digits.data() + digits.size(), value, 16);

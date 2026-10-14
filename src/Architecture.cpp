@@ -4,8 +4,7 @@
 
 namespace madamp {
 
-std::string_view
-archName(const LIEF::MachO::Binary& binary)
+std::string_view archName(const LIEF::MachO::Binary& binary)
 {
     const LIEF::MachO::Header& header = binary.header();
 

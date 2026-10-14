@@ -1,4 +1,5 @@
 #include "Dump.h"
+#include "Error.h"
 #include "ExitCode.h"
 
 #include <LIEF/MachO.hpp>

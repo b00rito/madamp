@@ -1,3 +1,5 @@
+#include "Error.h"
+
 #include "ExitCode.h"
 
 #include <iostream>

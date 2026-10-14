@@ -33,7 +33,7 @@ add_executable(madamp
     src/main.cpp
     src/Architecture.cpp
     src/Dump.cpp
-    src/ExitCode.cpp
+    src/Error.cpp
     src/Format.cpp
 )
 target_link_libraries(madamp PRIVATE LIEF::LIEF)
