@@ -3,6 +3,7 @@
 #include "Error.h"
 #include "ExitCode.h"
 #include "Options.h"
+#include "Style.h"
 
 #include <LIEF/MachO.hpp>
 #include <LIEF/logging.hpp>
@@ -58,7 +59,9 @@ int main(int argc, char** argv)
         return madamp::fail("LIEF could not parse it", path);
     }
 
-    madamp::printSlices(*fat);
+    const madamp::Style style(options->getUseColor());
+
+    madamp::printSlices(*fat, style);
 
     bool matched = false;
     bool succeeded = true;
@@ -70,7 +73,7 @@ int main(int argc, char** argv)
 
         matched = true;
 
-        if (!madamp::dumpSlice(binary, *options)) {
+        if (!madamp::dumpSlice(binary, *options, style)) {
             succeeded = false;
         }
     }

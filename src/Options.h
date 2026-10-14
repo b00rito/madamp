@@ -20,6 +20,7 @@ public:
     const std::string& getArch() const { return m_arch; }
     bool getShowHelp() const { return m_showHelp; }
     bool getShowVersion() const { return m_showVersion; }
+    bool getUseColor() const { return m_useColor; }
 
     bool includesArch(std::string_view arch) const { return m_arch.empty() || m_arch == arch; }
 
@@ -28,6 +29,7 @@ private:
     std::string m_arch; // empty: every slice
     bool m_showHelp { false };
     bool m_showVersion { false };
+    bool m_useColor { false };
 };
 
 } // namespace madamp

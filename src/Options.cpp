@@ -11,6 +11,7 @@ void printUsage(std::ostream& out)
     out << R"(usage: madamp [options] <mach-o file>
 
         --arch NAME  only dump this slice (arm64, arm64e, x86_64, ...)
+        --color      use ANSI colors
         -h, --help   show this help
         --version    show the version
 )";
@@ -27,6 +28,8 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             options.m_showHelp = true;
         } else if (argument == "--version") {
             options.m_showVersion = true;
+        } else if (argument == "--color") {
+            options.m_useColor = true;
         } else if (argument == "--arch") {
             if (i + 1 == arguments.size()) {
                 printError("--arch needs a value");
