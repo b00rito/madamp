@@ -10,10 +10,12 @@ void printUsage(std::ostream& out)
 {
     out << R"(usage: madamp [options] <mach-o file>
 
-        --arch NAME  only dump this slice (arm64, arm64e, x86_64, ...)
-        --color      use ANSI colors
-        -h, --help   show this help
-        --version    show the version
+        -H, --header     Mach header
+        -a, --all        everything (the default when no dump is selected)
+        --arch NAME      only dump this slice (arm64, arm64e, x86_64, ...)
+        --color          use ANSI colors
+        -h, --help       show this help
+        --version        show the version
 )";
 }
 
@@ -30,6 +32,10 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             options.m_showVersion = true;
         } else if (argument == "--color") {
             options.m_useColor = true;
+        } else if (argument == "-H" || argument == "--header") {
+            options.m_showHeader = true;
+        } else if (argument == "-a" || argument == "--all") {
+            options.selectAll();
         } else if (argument == "--arch") {
             if (i + 1 == arguments.size()) {
                 printError("--arch needs a value");
@@ -57,6 +63,10 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
         printError("no input file");
 
         return std::nullopt;
+    }
+
+    if (options.selectsNothing()) {
+        options.selectAll();
     }
 
     return options;

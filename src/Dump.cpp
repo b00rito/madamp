@@ -28,11 +28,22 @@ void printSlices(const LIEF::MachO::FatBinary& fat, const Style& style)
     }
 }
 
-bool dumpSlice(const LIEF::MachO::Binary& binary, const Options&, const Style& style)
+bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const Style& style)
 {
-    std::cout << '\n' << style.bold() << style.green() << "### " << archName(binary) << " ###" << style.reset() << '\n';
+    std::cout << '\n'
+              << style.bold() << style.green() << "### " << archName(binary) << " ###" << style.reset() << '\n';
+
+    if (options.getShowHeader()) {
+        dumpHeader(binary, style);
+    }
 
     return true;
+}
+
+void printTitle(const Style& style, std::string_view title)
+{
+    std::cout << '\n'
+              << style.bold() << style.purple() << "== " << title << " ==" << style.reset() << '\n';
 }
 
 } // namespace madamp

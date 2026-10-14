@@ -13,6 +13,7 @@ public:
 
     std::string_view bold() const { return code("\x1b[1m"); }
     std::string_view green() const { return code("\x1b[32m"); }
+    std::string_view purple() const { return code("\x1b[34m"); }
     std::string_view reset() const { return code("\x1b[0m"); }
 
 private:
