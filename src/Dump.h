@@ -20,6 +20,7 @@ void dumpHeader(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpCommands(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpSegments(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpSections(const LIEF::MachO::Binary& binary, const Style& style);
+void dumpLibraries(const LIEF::MachO::Binary& binary, const Style& style);
 
 } // namespace madamp
 

@@ -14,6 +14,7 @@ void printUsage(std::ostream& out)
         -l, --commands   load commands
         -g, --segments   segments: where each one is in the file and in memory
         -s, --sections   sections
+        -L, --libs       linked libraries and rpaths
         -a, --all        everything (the default when no dump is selected)
         --arch NAME      only dump this slice (arm64, arm64e, x86_64, ...)
         --color          use ANSI colors
@@ -43,6 +44,8 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             options.m_showSegments = true;
         } else if (argument == "-s" || argument == "--sections") {
             options.m_showSections = true;
+        } else if (argument == "-L" || argument == "--libs") {
+            options.m_showLibraries = true;
         } else if (argument == "-a" || argument == "--all") {
             options.selectAll();
         } else if (argument == "--arch") {

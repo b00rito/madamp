@@ -25,13 +25,14 @@ public:
     bool getShowCommands() const { return m_showCommands; }
     bool getShowSegments() const { return m_showSegments; }
     bool getShowSections() const { return m_showSections; }
+    bool getShowLibraries() const { return m_showLibraries; }
 
     bool includesArch(std::string_view arch) const { return m_arch.empty() || m_arch == arch; }
 
 private:
     // With no dump selected, madamp shows everything.
-    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections; }
-    void selectAll() { m_showHeader = m_showCommands = m_showSegments = m_showSections = true; }
+    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries; }
+    void selectAll() { m_showHeader = m_showCommands = m_showSegments = m_showSections = m_showLibraries = true; }
 
     std::string m_path;
     std::string m_arch; // empty: every slice
@@ -42,6 +43,7 @@ private:
     bool m_showCommands { false };
     bool m_showSegments { false };
     bool m_showSections { false };
+    bool m_showLibraries { false };
 };
 
 } // namespace madamp

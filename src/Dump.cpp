@@ -48,6 +48,10 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
         dumpSections(binary, style);
     }
 
+    if (options.getShowLibraries()) {
+        dumpLibraries(binary, style);
+    }
+
     return true;
 }
 
