@@ -41,6 +41,7 @@ add_executable(madamp
     src/SegmentsDump.cpp
     src/SectionsDump.cpp
     src/LibrariesDump.cpp
+    src/HexDump.cpp
 )
 target_link_libraries(madamp PRIVATE LIEF::LIEF)
 target_compile_options(madamp PRIVATE -Wall -Wextra -Wpedantic)

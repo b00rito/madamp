@@ -52,7 +52,15 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
         dumpLibraries(binary, style);
     }
 
-    return true;
+    bool succeeded = true;
+
+    for (const std::string& sectionName : options.getHexdumps()) {
+        if (!dumpHexdump(binary, sectionName, style)) {
+            succeeded = false;
+        }
+    }
+
+    return succeeded;
 }
 
 void printTitle(const Style& style, std::string_view title)

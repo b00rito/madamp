@@ -6,6 +6,7 @@
 #include <LIEF/MachO/Binary.hpp>
 #include <LIEF/MachO/FatBinary.hpp>
 
+#include <string>
 #include <string_view>
 
 namespace madamp {
@@ -21,6 +22,8 @@ void dumpCommands(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpSegments(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpSections(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpLibraries(const LIEF::MachO::Binary& binary, const Style& style);
+
+bool dumpHexdump(const LIEF::MachO::Binary& binary, const std::string& sectionName, const Style& style);
 
 } // namespace madamp
 
