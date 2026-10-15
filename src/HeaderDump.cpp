@@ -78,7 +78,9 @@ void dumpHeader(const LIEF::MachO::Binary& binary, const Style& style)
     }
 
     if (const LIEF::MachO::BuildVersion* build = binary.build_version()) {
-        field("platform") << to_string(build->platform()) << ", minos " << versionString(build->minos()) << ", sdk " << versionString(build->sdk()) << '\n';
+        field("platform") << to_string(build->platform())
+                          << ", minos " << versionString(build->minos())
+                          << ", sdk " << versionString(build->sdk()) << '\n';
     }
 
     bool encrypted = binary.has_encryption_info() && binary.encryption_info()->crypt_id() != 0;
