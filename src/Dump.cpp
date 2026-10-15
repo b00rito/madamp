@@ -44,6 +44,10 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
         dumpSegments(binary, style);
     }
 
+    if (options.getShowSections()) {
+        dumpSections(binary, style);
+    }
+
     return true;
 }
 

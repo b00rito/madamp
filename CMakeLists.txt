@@ -39,6 +39,7 @@ add_executable(madamp
     src/HeaderDump.cpp
     src/LoadCommandsDump.cpp
     src/SegmentsDump.cpp
+    src/SectionsDump.cpp
 )
 target_link_libraries(madamp PRIVATE LIEF::LIEF)
 target_compile_options(madamp PRIVATE -Wall -Wextra -Wpedantic)
