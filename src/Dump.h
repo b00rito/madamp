@@ -18,6 +18,7 @@ void printTitle(const Style& style, std::string_view title);
 
 void dumpHeader(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpCommands(const LIEF::MachO::Binary& binary, const Style& style);
+void dumpSegments(const LIEF::MachO::Binary& binary, const Style& style);
 
 } // namespace madamp
 

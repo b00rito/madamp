@@ -16,6 +16,8 @@ public:
     std::string_view purple() const { return code("\x1b[34m"); }
     std::string_view cyan() const { return code("\x1b[36m"); }
     std::string_view dim() const { return code("\x1b[2m"); }
+    std::string_view red() const { return code("\x1b[31m"); }
+    std::string_view yellow() const { return code("\x1b[33m"); }
     std::string_view reset() const { return code("\x1b[0m"); }
 
 private:

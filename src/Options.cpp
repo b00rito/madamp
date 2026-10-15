@@ -12,6 +12,7 @@ void printUsage(std::ostream& out)
 
         -H, --header     Mach header
         -l, --commands   load commands
+        -g, --segments   segments: where each one is in the file and in memory
         -a, --all        everything (the default when no dump is selected)
         --arch NAME      only dump this slice (arm64, arm64e, x86_64, ...)
         --color          use ANSI colors
@@ -37,6 +38,8 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             options.m_showHeader = true;
         } else if (argument == "-l" || argument == "--commands") {
             options.m_showCommands = true;
+        } else if (argument == "-g" || argument == "--segments") {
+            options.m_showSegments = true;
         } else if (argument == "-a" || argument == "--all") {
             options.selectAll();
         } else if (argument == "--arch") {
