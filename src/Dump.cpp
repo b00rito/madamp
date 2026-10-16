@@ -1,5 +1,6 @@
 #include "Dump.h"
 
+#include "AddressMap.h"
 #include "Architecture.h"
 #include "Format.h"
 #include "Options.h"
@@ -57,6 +58,15 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
     for (const std::string& sectionName : options.getHexdumps()) {
         if (!dumpHexdump(binary, sectionName, style)) {
             succeeded = false;
+        }
+    }
+
+    // The address map is only worth building when something uses it.
+    if (!options.getAddresses().empty()) {
+        AddressMap map(binary);
+
+        for (std::uint64_t address : options.getAddresses()) {
+            dumpAddress(binary, map, address, style);
         }
     }
 

@@ -2,9 +2,34 @@
 
 #include "Error.h"
 
+#include <charconv>
 #include <iostream>
 
 namespace madamp {
+
+namespace {
+
+std::optional<std::uint64_t> parseAddress(const std::string& text)
+{
+    std::string_view digits = text;
+    int base = 10;
+
+    if (digits.size() > 2 && digits[0] == '0' && (digits[1] == 'x' || digits[1] == 'X')) {
+        digits.remove_prefix(2);
+        base = 16;
+    }
+
+    std::uint64_t value = 0;
+    auto result = std::from_chars(digits.data(), digits.data() + digits.size(), value, base);
+
+    if (result.ec != std::errc() || result.ptr != digits.data() + digits.size()) {
+        return std::nullopt;
+    }
+
+    return value;
+}
+
+} // namespace
 
 void printUsage(std::ostream& out)
 {
@@ -16,6 +41,7 @@ void printUsage(std::ostream& out)
         -s, --sections   sections
         -L, --libs       linked libraries and rpaths
         -x, --hexdump S  hexdump section S ("SEG,SECT" or "SECT"), repeatable
+        --addr VA        locate a virtual address: segment, section, symbol, file offset
         -a, --all        everything (the default when no dump is selected)
         --arch NAME      only dump this slice (arm64, arm64e, x86_64, ...)
         --color          use ANSI colors
@@ -55,6 +81,22 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             }
 
             options.m_hexdumps.push_back(arguments[++i]);
+        } else if (argument == "--addr") {
+            if (i + 1 == arguments.size()) {
+                printError("--addr needs an address");
+
+                return std::nullopt;
+            }
+
+            std::optional<std::uint64_t> address = parseAddress(arguments[++i]);
+
+            if (!address) {
+                printError("bad address '" + arguments[i] + "'");
+
+                return std::nullopt;
+            }
+
+            options.m_addresses.push_back(*address);
         } else if (argument == "-a" || argument == "--all") {
             options.selectAll();
         } else if (argument == "--arch") {
