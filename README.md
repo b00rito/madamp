@@ -65,17 +65,85 @@ cmake --build build -j
 
 CMake prints which SDK it uses (`-- LIEF 1.0.0: ...`). To use an SDK
 somewhere else, pass `-DLIEF_DIR=<sdk_path>/lib/cmake/LIEF` to the first
-command. CMake remembers the choice, so later builds only need
-`cmake --build build -j`. To go back to `third_party/LIEF`, delete
-`build/` and configure again.
+command. CMake remembers the choice, so later builds only need `cmake
+--build build -j`. To go back to `third_party/LIEF`, delete `build/` and
+configure again.
 
-The default build type is `RelWithDebInfo`. Pass
-`-DCMAKE_BUILD_TYPE=Debug` for a debug build.
+The default build type is `RelWithDebInfo`. Pass `-DCMAKE_BUILD_TYPE=Debug`
+for a debug build.
 
-### Run
+## Usage
+
+```
+madamp [options] <mach-o file>
+```
+
+With no dump option, madamp dumps everything, for every slice of a fat
+binary. `./build/madamp --help` lists all the options.
+
+### Examples
 
 ```sh
+# Everything, for every slice
 ./build/madamp /bin/ls
+
+# Only one slice of a fat binary (arm64, arm64e, x86_64, ...)
+./build/madamp --arch arm64e /bin/ls
+
+# The Mach header and the load commands
+./build/madamp -H -l --arch arm64e /bin/ls
+
+# Segments (where each one is in the file and in memory), and sections
+./build/madamp -g -s --arch arm64e /bin/ls
+
+# Linked libraries and rpaths
+./build/madamp -L --arch arm64e /bin/ls
+
+# A hexdump of a section, by "SECT" or by "SEG,SECT"; -x is repeatable
+./build/madamp -x __cstring --arch arm64e /bin/ls
+./build/madamp -x __DATA_CONST,__got -x __cstring --arch arm64e /bin/ls
+
+# Everything, plus a hexdump; -x alone shows only the hexdump
+./build/madamp -a -x __cstring --arch arm64e /bin/ls
+
+# With colors
+./build/madamp --color /bin/ls | less -R
+```
+
+### Locating an address
+
+`--addr VA` dumps what is at a virtual address. Prints info like its
+segment and section, the symbol, import or string there, and its offset in
+the slice and in the file. It takes hex (`0x...`) or decimal and is
+repeatable.
+
+```
+$ ./build/madamp --addr 0x100003a84 --arch arm64e /bin/ls
+...
+== Address 0x100003a84 ==
+  segment       __TEXT (0x100000000-0x100008000, r-x)
+  section       __TEXT,__text +0x260 (REGULAR)
+  slice offset  0x3a84
+  file offset   0x13a84
+```
+
+`0x100003a84` is the entry point of `/bin/ls` (`-H` shows it). The file
+offset is the slice offset plus `0x10000`, where the arm64e slice starts.
+`/bin/ls` is stripped, so there's no symbol line. More addresses to try in
+the same slice:
+
+```sh
+# A C string in __cstring
+./build/madamp --addr 0x100007a40 --arch arm64e /bin/ls
+
+# A stub that jumps to an imported function
+./build/madamp --addr 0x1000073e8 --arch arm64e /bin/ls
+
+# __bss: zero-filled memory, not data from the file
+./build/madamp --addr 0x10000c0d0 --arch arm64e /bin/ls
+
+# __PAGEZERO: reserved, with no access and no file bytes
+./build/madamp --addr 0x1000 --arch arm64e /bin/ls
 ```
 
 EOF
