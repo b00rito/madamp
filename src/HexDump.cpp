@@ -2,6 +2,7 @@
 #include "Dump.h"
 #include "Error.h"
 #include "Format.h"
+#include "MachOUtilities.h"
 #include "Style.h"
 
 #include <LIEF/MachO.hpp>
@@ -27,19 +28,6 @@ const LIEF::MachO::Section* findSection(const LIEF::MachO::Binary& binary, const
     }
 
     return binary.get_section(name.substr(0, comma), name.substr(comma + 1));
-}
-
-// Zero-fill sections (__bss, __common, ...) have no bytes in the file.
-bool isZeroFill(const LIEF::MachO::Section& section)
-{
-    switch (section.type()) {
-    case LIEF::MachO::Section::TYPE::ZEROFILL:
-    case LIEF::MachO::Section::TYPE::GB_ZEROFILL:
-    case LIEF::MachO::Section::TYPE::THREAD_LOCAL_ZEROFILL:
-        return true;
-    default:
-        return false;
-    }
 }
 
 std::string byteHex(std::uint8_t byte)

@@ -1,9 +1,9 @@
 #include "Dump.h"
 #include "Format.h"
+#include "MachOUtilities.h"
 #include "Style.h"
 
 #include <LIEF/MachO.hpp>
-#include <mach/vm_prot.h>
 
 #include <cstdint>
 #include <iomanip>
@@ -14,30 +14,6 @@
 namespace madamp {
 
 namespace {
-
-constexpr auto protectionRead = static_cast<std::uint32_t>(VM_PROT_READ);
-constexpr auto protectionWrite = static_cast<std::uint32_t>(VM_PROT_WRITE);
-constexpr auto protectionExecute = static_cast<std::uint32_t>(VM_PROT_EXECUTE);
-
-// "r-x" for read and execute, like ls -l.
-std::string protectionString(std::uint32_t protection)
-{
-    std::string text = "---";
-
-    if (protection & protectionRead) {
-        text[0] = 'r';
-    }
-
-    if (protection & protectionWrite) {
-        text[1] = 'w';
-    }
-
-    if (protection & protectionExecute) {
-        text[2] = 'x';
-    }
-
-    return text;
-}
 
 // Writable and executable at once is suspicious, so it's red.
 std::string_view protectionColor(const Style& style, std::uint32_t protection)
