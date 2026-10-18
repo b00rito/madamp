@@ -31,6 +31,13 @@ void printSlices(const LIEF::MachO::FatBinary& fat, const Style& style)
 
 bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const Style& style)
 {
+    // The graph is all --dot prints, so it can go straight to dot.
+    if (options.getShowDependencyGraph()) {
+        printDependencyGraph(binary, options.getPath());
+
+        return true;
+    }
+
     std::cout << '\n' << style.bold() << style.green() << "### " << archName(binary) << " ###" << style.reset() << '\n';
 
     if (options.getShowHeader()) {
@@ -51,6 +58,10 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
 
     if (options.getShowLibraries()) {
         dumpLibraries(binary, style);
+    }
+
+    if (options.getShowDependencies()) {
+        dumpDependencies(binary, options.getPath(), style);
     }
 
     bool succeeded = true;

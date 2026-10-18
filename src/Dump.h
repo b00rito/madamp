@@ -24,6 +24,8 @@ void dumpCommands(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpSegments(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpSections(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpLibraries(const LIEF::MachO::Binary& binary, const Style& style);
+void dumpDependencies(const LIEF::MachO::Binary& binary, const std::string& path, const Style& style);
+void printDependencyGraph(const LIEF::MachO::Binary& binary, const std::string& path);
 bool dumpHexdump(const LIEF::MachO::Binary& binary, const std::string& sectionName, const Style& style);
 void dumpAddress(const LIEF::MachO::Binary& binary, const AddressMap& map, std::uint64_t address, const Style& style);
 bool dumpDisassembly(const LIEF::MachO::Binary& binary, const AddressMap& map, const std::string& name, const Style& style);

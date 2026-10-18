@@ -98,8 +98,9 @@ for a debug build.
 madamp [options] <mach-o file>
 ```
 
-With no dump option, madamp dumps everything, for every slice of a fat
-binary. `./build/madamp --help` lists all the options.
+With no dump option, madamp dumps everything but the dependencies (`-D`),
+for every slice of a fat binary. `./build/madamp --help` lists all the
+options.
 
 ### Examples
 
@@ -134,6 +135,14 @@ binary. `./build/madamp --help` lists all the options.
 
 # Every fixup (rebase or bind), decoded from the bytes on disk
 ./build/madamp -F --arch arm64e /bin/ls
+
+# Where dyld finds each library; -D reads those files too, so it is
+# not part of the default dump
+./build/madamp -D --arch arm64e /bin/ls
+
+# The same as a Graphviz graph (brew install graphviz); --dot needs
+# --arch for a universal binary
+./build/madamp --dot --arch arm64e /bin/ls | dot -Tsvg > ls.svg
 
 # With colors
 ./build/madamp --color /bin/ls | less -R

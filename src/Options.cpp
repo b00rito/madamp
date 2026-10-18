@@ -42,10 +42,12 @@ void printUsage(std::ostream& out)
         -L, --libs       linked libraries and rpaths
         -S, --symbols    imports (by library) and exports
         -F, --fixups     fixups: import table, chains, every fixup decoded
+        -D, --deps       dependency tree: where dyld finds each library
+        --dot            only the dependencies, as a Graphviz graph
         -x, --hexdump S  hexdump section S ("SEG,SECT" or "SECT"), repeatable
         --addr VA        locate a virtual address: segment, section, symbol, file offset
         -d, --disasm S   disassemble section or symbol S ("__text", "_main"), repeatable
-        -a, --all        everything (the default when no dump is selected)
+        -a, --all        everything but -D (the default when no dump is selected)
         --arch NAME      only dump this slice (arm64, arm64e, x86_64, ...)
         --color          use ANSI colors
         -h, --help       show this help
@@ -80,6 +82,11 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             options.m_showSymbols = true;
         } else if (argument == "-F" || argument == "--fixups") {
             options.m_showFixups = true;
+        } else if (argument == "-D" || argument == "--deps") {
+            options.m_showDependencies = true;
+        } else if (argument == "--dot") {
+            options.m_showDependencies = true;
+            options.m_showDependencyGraph = true;
         } else if (argument == "-x" || argument == "--hexdump") {
             if (i + 1 == arguments.size()) {
                 printError(argument + " needs a section");

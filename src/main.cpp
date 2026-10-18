@@ -59,9 +59,16 @@ int main(int argc, char** argv)
         return madamp::fail("LIEF could not parse it", path);
     }
 
+    // dot draws only the first graph it reads.
+    if (options->getShowDependencyGraph() && fat->size() > 1 && options->getArch().empty()) {
+        return madamp::fail("a universal binary: --dot needs --arch", path);
+    }
+
     const madamp::Style style(options->getUseColor());
 
-    madamp::printSlices(*fat, style);
+    if (!options->getShowDependencyGraph()) {
+        madamp::printSlices(*fat, style);
+    }
 
     bool matched = false;
     bool succeeded = true;

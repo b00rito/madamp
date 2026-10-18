@@ -29,6 +29,8 @@ public:
     bool getShowLibraries() const { return m_showLibraries; }
     bool getShowSymbols() const { return m_showSymbols; }
     bool getShowFixups() const { return m_showFixups; }
+    bool getShowDependencies() const { return m_showDependencies; }
+    bool getShowDependencyGraph() const { return m_showDependencyGraph; }
     const std::vector<std::string>& getHexdumps() const { return m_hexdumps; }
     const std::vector<std::uint64_t>& getAddresses() const { return m_addresses; }
     const std::vector<std::string>& getDisassemblies() const { return m_disassemblies; }
@@ -36,9 +38,10 @@ public:
     bool includesArch(std::string_view arch) const { return m_arch.empty() || m_arch == arch; }
 
 private:
-    // With no dump selected, madamp shows everything.
-    // --hexdump, --addr and --disasm on their own show just that.
-    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries && !m_showSymbols && !m_showFixups && m_hexdumps.empty() && m_addresses.empty() && m_disassemblies.empty(); }
+    // With no dump selected, madamp shows everything but the
+    // dependencies, which means reading other files.
+    // --hexdump, --addr, --disasm and --deps on their own show just that.
+    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries && !m_showSymbols && !m_showFixups && !m_showDependencies && m_hexdumps.empty() && m_addresses.empty() && m_disassemblies.empty(); }
     void selectAll() { m_showHeader = m_showCommands = m_showSegments = m_showSections = m_showLibraries = m_showSymbols = m_showFixups = true; }
 
     std::string m_path;
@@ -53,6 +56,8 @@ private:
     bool m_showLibraries { false };
     bool m_showSymbols { false };
     bool m_showFixups { false };
+    bool m_showDependencies { false };
+    bool m_showDependencyGraph { false };
     std::vector<std::string> m_hexdumps;
     std::vector<std::uint64_t> m_addresses;
     std::vector<std::string> m_disassemblies;
