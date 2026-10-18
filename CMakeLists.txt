@@ -29,6 +29,35 @@ endif()
 
 message(STATUS "LIEF ${LIEF_VERSION}: ${LIEF_DIR}")
 
+# Capstone 5 for disassembly, linked statically. By default it comes from
+# third_party/capstone, which isn't in git (see third_party/README.md). To
+# use another copy with the same layout, such as Homebrew's, pass
+# -DCAPSTONE_DIR=/opt/homebrew/opt/capstone.
+set(MADAMP_CAPSTONE "${CMAKE_CURRENT_SOURCE_DIR}/third_party/capstone")
+
+if(NOT CAPSTONE_DIR)
+  set(CAPSTONE_DIR "${MADAMP_CAPSTONE}")
+endif()
+
+set(CAPSTONE_INCLUDE_DIR "${CAPSTONE_DIR}/include/capstone")
+set(CAPSTONE_LIBRARY "${CAPSTONE_DIR}/lib/libcapstone.a")
+
+if(NOT EXISTS "${CAPSTONE_INCLUDE_DIR}/capstone.h" OR NOT EXISTS "${CAPSTONE_LIBRARY}")
+    message(FATAL_ERROR
+        "Capstone not found in ${CAPSTONE_DIR}. Put it in "
+        "third_party/capstone (see third_party/README.md), or pass "
+        "-DCAPSTONE_DIR=<dir with include/capstone and lib/libcapstone.a>.")
+endif()
+
+file(STRINGS "${CAPSTONE_INCLUDE_DIR}/capstone.h" CAPSTONE_MAJOR REGEX "^#define CS_API_MAJOR ")
+string(REGEX REPLACE "^#define CS_API_MAJOR ([0-9]+).*" "\\1" CAPSTONE_MAJOR "${CAPSTONE_MAJOR}")
+
+if(CAPSTONE_MAJOR LESS 5)
+    message(FATAL_ERROR "Capstone ${CAPSTONE_MAJOR} in ${CAPSTONE_DIR}; madamp needs 5 or later.")
+endif()
+
+message(STATUS "Capstone ${CAPSTONE_MAJOR}: ${CAPSTONE_DIR}")
+
 add_executable(madamp
     src/main.cpp
     src/Architecture.cpp
@@ -45,8 +74,10 @@ add_executable(madamp
     src/MachOUtilities.cpp
     src/AddressMap.cpp
     src/AddressDump.cpp
+    src/DisassemblyDump.cpp
 )
-target_link_libraries(madamp PRIVATE LIEF::LIEF)
+target_include_directories(madamp SYSTEM PRIVATE ${CAPSTONE_INCLUDE_DIR})
+target_link_libraries(madamp PRIVATE LIEF::LIEF ${CAPSTONE_LIBRARY})
 target_compile_options(madamp PRIVATE -Wall -Wextra -Wpedantic)
 
 # EOF

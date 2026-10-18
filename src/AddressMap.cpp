@@ -166,6 +166,70 @@ Location AddressMap::locate(std::uint64_t address) const
     return location;
 }
 
+std::string AddressMap::describe(std::uint64_t address) const
+{
+    Location location = locate(address);
+
+    if (!location.segment) {
+        return {};
+    }
+
+    if (!location.import.empty()) {
+        return location.import;
+    }
+
+    if (!location.symbol.empty()) {
+        return location.symbol;
+    }
+
+    std::string text = location.segment->name();
+
+    if (location.section) {
+        text += "," + location.section->name() + "+" + hex(address - location.section->address());
+    } else {
+        text += "+" + hex(address - location.segment->virtual_address());
+    }
+
+    if (!location.cstring.empty()) {
+        text += " " + location.cstring;
+    }
+
+    return text;
+}
+
+std::optional<std::string_view> AddressMap::symbolAt(std::uint64_t address) const
+{
+    auto found = m_symbols.find(address);
+
+    if (found == m_symbols.end()) {
+        return std::nullopt;
+    }
+
+    return found->second;
+}
+
+std::optional<std::uint64_t> AddressMap::nextSymbol(std::uint64_t address) const
+{
+    auto next = m_symbols.upper_bound(address);
+
+    if (next == m_symbols.end()) {
+        return std::nullopt;
+    }
+
+    return next->first;
+}
+
+std::optional<std::uint64_t> AddressMap::symbolAddress(std::string_view name) const
+{
+    for (const auto& [address, symbol] : m_symbols) {
+        if (symbol == name) {
+            return address;
+        }
+    }
+
+    return std::nullopt;
+}
+
 } // namespace madamp
 
 // EOF

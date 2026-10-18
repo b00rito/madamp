@@ -2,6 +2,7 @@
 
 #include <array>
 #include <charconv>
+#include <string_view>
 
 namespace madamp {
 
@@ -17,6 +18,13 @@ std::string hex(std::uint64_t value, std::size_t width)
     }
 
     return "0x" + text;
+}
+
+std::string byteHex(std::uint8_t byte)
+{
+    constexpr std::string_view digits = "0123456789abcdef";
+
+    return { digits[byte >> 4], digits[byte & 0xf] };
 }
 
 } // namespace madamp

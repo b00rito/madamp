@@ -26,6 +26,7 @@ void dumpSections(const LIEF::MachO::Binary& binary, const Style& style);
 void dumpLibraries(const LIEF::MachO::Binary& binary, const Style& style);
 bool dumpHexdump(const LIEF::MachO::Binary& binary, const std::string& sectionName, const Style& style);
 void dumpAddress(const LIEF::MachO::Binary& binary, const AddressMap& map, std::uint64_t address, const Style& style);
+bool dumpDisassembly(const LIEF::MachO::Binary& binary, const AddressMap& map, const std::string& name, const Style& style);
 
 } // namespace madamp
 

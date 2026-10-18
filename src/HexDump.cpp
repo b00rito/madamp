@@ -15,30 +15,6 @@
 
 namespace madamp {
 
-namespace {
-
-// A section named "SEG,SECT", or just "SECT" (the first one with that
-// name). nullptr if there's none.
-const LIEF::MachO::Section* findSection(const LIEF::MachO::Binary& binary, const std::string& name)
-{
-    std::size_t comma = name.find(',');
-
-    if (comma == std::string::npos) {
-        return binary.get_section(name);
-    }
-
-    return binary.get_section(name.substr(0, comma), name.substr(comma + 1));
-}
-
-std::string byteHex(std::uint8_t byte)
-{
-    constexpr std::string_view digits = "0123456789abcdef";
-
-    return { digits[byte >> 4], digits[byte & 0xf] };
-}
-
-} // namespace
-
 // An xxd-style dump, addressed by VM address so it lines up with
 // disassemblers.
 bool dumpHexdump(const LIEF::MachO::Binary& binary, const std::string& sectionName, const Style& style)

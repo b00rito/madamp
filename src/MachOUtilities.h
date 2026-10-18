@@ -1,5 +1,6 @@
 #pragma once
 
+#include <LIEF/MachO/Binary.hpp>
 #include <LIEF/MachO/Section.hpp>
 #include <mach/vm_prot.h>
 
@@ -17,6 +18,8 @@ std::string protectionString(std::uint32_t protection);
 
 // Zero-fill sections (__bss, __common, ...) have no bytes in the file.
 bool isZeroFill(const LIEF::MachO::Section& section);
+
+const LIEF::MachO::Section* findSection(const LIEF::MachO::Binary& binary, const std::string& name);
 
 } // namespace madamp
 

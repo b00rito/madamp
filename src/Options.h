@@ -29,13 +29,14 @@ public:
     bool getShowLibraries() const { return m_showLibraries; }
     const std::vector<std::string>& getHexdumps() const { return m_hexdumps; }
     const std::vector<std::uint64_t>& getAddresses() const { return m_addresses; }
+    const std::vector<std::string>& getDisassemblies() const { return m_disassemblies; }
 
     bool includesArch(std::string_view arch) const { return m_arch.empty() || m_arch == arch; }
 
 private:
     // With no dump selected, madamp shows everything.
-    // --hexdump and --addr on their own show just that.
-    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries && m_hexdumps.empty() && m_addresses.empty(); }
+    // --hexdump, --addr and --disasm on their own show just that.
+    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries && m_hexdumps.empty() && m_addresses.empty() && m_disassemblies.empty(); }
     void selectAll() { m_showHeader = m_showCommands = m_showSegments = m_showSections = m_showLibraries = true; }
 
     std::string m_path;
@@ -50,6 +51,7 @@ private:
     bool m_showLibraries { false };
     std::vector<std::string> m_hexdumps;
     std::vector<std::uint64_t> m_addresses;
+    std::vector<std::string> m_disassemblies;
 };
 
 } // namespace madamp

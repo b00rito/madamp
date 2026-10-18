@@ -8,6 +8,7 @@
 #include <map>
 #include <optional>
 #include <string>
+#include <string_view>
 
 namespace madamp {
 
@@ -30,6 +31,16 @@ public:
     explicit AddressMap(const LIEF::MachO::Binary& binary);
 
     Location locate(std::uint64_t address) const;
+
+    std::string describe(std::uint64_t address) const;
+
+    std::optional<std::string_view> symbolAt(std::uint64_t address) const;
+
+    std::optional<std::uint64_t> nextSymbol(std::uint64_t address) const;
+
+    std::optional<std::uint64_t> symbolAddress(std::string_view name) const;
+
+    const LIEF::MachO::Binary& binary() const { return m_binary; }
 
 private:
     // The map doesn't own the binary and must not outlive it.

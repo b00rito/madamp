@@ -42,6 +42,7 @@ void printUsage(std::ostream& out)
         -L, --libs       linked libraries and rpaths
         -x, --hexdump S  hexdump section S ("SEG,SECT" or "SECT"), repeatable
         --addr VA        locate a virtual address: segment, section, symbol, file offset
+        -d, --disasm S   disassemble section or symbol S ("__text", "_main"), repeatable
         -a, --all        everything (the default when no dump is selected)
         --arch NAME      only dump this slice (arm64, arm64e, x86_64, ...)
         --color          use ANSI colors
@@ -97,6 +98,14 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             }
 
             options.m_addresses.push_back(*address);
+        } else if (argument == "-d" || argument == "--disasm") {
+            if (i + 1 == arguments.size()) {
+                printError(argument + " needs a section or symbol");
+
+                return std::nullopt;
+            }
+
+            options.m_disassemblies.push_back(arguments[++i]);
         } else if (argument == "-a" || argument == "--all") {
             options.selectAll();
         } else if (argument == "--arch") {

@@ -10,6 +10,8 @@ namespace madamp {
 // hex(0x20, 4) is "0x0020".
 std::string hex(std::uint64_t value, std::size_t width = 0);
 
+std::string byteHex(std::uint8_t byte);
+
 // "14.0.0" from {14, 0, 0}.
 template<typename Version>
 std::string versionString(const Version& version)
