@@ -76,8 +76,8 @@ void printImportGroup(const LIEF::MachO::Binary& binary, std::int32_t ordinal, c
     if (ordinal > 0) {
         const LIEF::MachO::DylibCommand& library = *loadedLibraries(binary)[ordinal - 1];
 
-        std::cout << "  " << style.bold() 
-                  << "#" << ordinal 
+        std::cout << "  " << style.bold()
+                  << "#" << ordinal
                   << ' ' << library.name() << style.reset()
                   << ' ' << style.dim()
                   << "(" << to_string(library.command()) << ")" << style.reset()

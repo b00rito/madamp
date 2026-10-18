@@ -62,11 +62,15 @@ bool dumpSlice(const LIEF::MachO::Binary& binary, const Options& options, const 
     }
 
     // The address map is only worth building when something uses it.
-    if (options.getShowSymbols() || !options.getDisassemblies().empty() || !options.getAddresses().empty()) {
+    if (options.getShowSymbols() || options.getShowFixups() || !options.getDisassemblies().empty() || !options.getAddresses().empty()) {
         AddressMap map(binary);
 
         if (options.getShowSymbols()) {
             dumpSymbols(binary, map, style);
+        }
+
+        if (options.getShowFixups() && !dumpFixups(binary, map, style)) {
+            succeeded = false;
         }
 
         for (const std::string& name : options.getDisassemblies()) {

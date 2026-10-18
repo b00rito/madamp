@@ -132,6 +132,9 @@ binary. `./build/madamp --help` lists all the options.
 # Imports grouped by library, and exports
 ./build/madamp -S --arch arm64e /bin/ls
 
+# Every fixup (rebase or bind), decoded from the bytes on disk
+./build/madamp -F --arch arm64e /bin/ls
+
 # With colors
 ./build/madamp --color /bin/ls | less -R
 ```

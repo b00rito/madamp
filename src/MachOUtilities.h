@@ -28,7 +28,7 @@ std::string protectionString(std::uint32_t protection);
 // Zero-fill sections (__bss, __common, ...) have no bytes in the file.
 bool isZeroFill(const LIEF::MachO::Section& section);
 
-// A section named "SEG,SECT", or just "SECT" - the first occurance.
+// A section named "SEG,SECT" or just "SECT" - the first occurrence.
 const LIEF::MachO::Section* findSection(const LIEF::MachO::Binary& binary, const std::string& name);
 
 // The dylibs in library-ordinal order: ordinal 1 is the first

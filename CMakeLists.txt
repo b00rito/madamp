@@ -76,6 +76,8 @@ add_executable(madamp
     src/AddressDump.cpp
     src/DisassemblyDump.cpp
     src/SymbolsDump.cpp
+    src/ChainedFixups.cpp
+    src/FixupsDump.cpp
 )
 target_include_directories(madamp SYSTEM PRIVATE ${CAPSTONE_INCLUDE_DIR})
 target_link_libraries(madamp PRIVATE LIEF::LIEF ${CAPSTONE_LIBRARY})

@@ -27,7 +27,7 @@ namespace {
 /*
  * Owns Capstone's handle and instruction buffer, and frees both in its
  * destructor.
-*/
+ */
 class Capstone {
 public:
     Capstone(cs_arch architecture, cs_mode mode)
