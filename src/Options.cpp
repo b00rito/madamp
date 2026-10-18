@@ -40,6 +40,7 @@ void printUsage(std::ostream& out)
         -g, --segments   segments: where each one is in the file and in memory
         -s, --sections   sections
         -L, --libs       linked libraries and rpaths
+        -S, --symbols    imports (by library) and exports
         -x, --hexdump S  hexdump section S ("SEG,SECT" or "SECT"), repeatable
         --addr VA        locate a virtual address: segment, section, symbol, file offset
         -d, --disasm S   disassemble section or symbol S ("__text", "_main"), repeatable
@@ -74,6 +75,8 @@ std::optional<Options> Options::parse(const std::vector<std::string>& arguments)
             options.m_showSections = true;
         } else if (argument == "-L" || argument == "--libs") {
             options.m_showLibraries = true;
+        } else if (argument == "-S" || argument == "--symbols") {
+            options.m_showSymbols = true;
         } else if (argument == "-x" || argument == "--hexdump") {
             if (i + 1 == arguments.size()) {
                 printError(argument + " needs a section");

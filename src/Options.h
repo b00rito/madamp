@@ -27,6 +27,7 @@ public:
     bool getShowSegments() const { return m_showSegments; }
     bool getShowSections() const { return m_showSections; }
     bool getShowLibraries() const { return m_showLibraries; }
+    bool getShowSymbols() const { return m_showSymbols; }
     const std::vector<std::string>& getHexdumps() const { return m_hexdumps; }
     const std::vector<std::uint64_t>& getAddresses() const { return m_addresses; }
     const std::vector<std::string>& getDisassemblies() const { return m_disassemblies; }
@@ -36,8 +37,8 @@ public:
 private:
     // With no dump selected, madamp shows everything.
     // --hexdump, --addr and --disasm on their own show just that.
-    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries && m_hexdumps.empty() && m_addresses.empty() && m_disassemblies.empty(); }
-    void selectAll() { m_showHeader = m_showCommands = m_showSegments = m_showSections = m_showLibraries = true; }
+    bool selectsNothing() const { return !m_showHeader && !m_showCommands && !m_showSegments && !m_showSections && !m_showLibraries && !m_showSymbols && m_hexdumps.empty() && m_addresses.empty() && m_disassemblies.empty(); }
+    void selectAll() { m_showHeader = m_showCommands = m_showSegments = m_showSections = m_showLibraries = m_showSymbols = true; }
 
     std::string m_path;
     std::string m_arch; // empty: every slice
@@ -49,6 +50,7 @@ private:
     bool m_showSegments { false };
     bool m_showSections { false };
     bool m_showLibraries { false };
+    bool m_showSymbols { false };
     std::vector<std::string> m_hexdumps;
     std::vector<std::uint64_t> m_addresses;
     std::vector<std::string> m_disassemblies;

@@ -129,6 +129,9 @@ binary. `./build/madamp --help` lists all the options.
 # Disassemble a section or a function by its symbol
 ./build/madamp -d __auth_stubs --arch arm64e /bin/ls
 
+# Imports grouped by library, and exports
+./build/madamp -S --arch arm64e /bin/ls
+
 # With colors
 ./build/madamp --color /bin/ls | less -R
 ```
