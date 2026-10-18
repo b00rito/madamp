@@ -29,6 +29,10 @@ madamp needs the **LIEF C++ SDK, version 1.0 or later**:
 - LIEF can also be built from source
   (<https://github.com/lief-project/LIEF>).
 
+For disassembly (`--disasm`) it also needs **Capstone 5**
+(<https://www.capstone-engine.org/>). `madamp` links Capstone's static
+library, `libcapstone.a` so it's needed only at build time.
+
 madamp targets macOS, Apple clang as a C++17 compiler and CMake 3.20 or
 later.
 
@@ -39,6 +43,7 @@ later.
 - macOS with Xcode or the Command Line Tools (Apple clang, C++17)
 - CMake 3.20 or later (`brew install cmake`)
 - The LIEF C++ SDK, 1.0 or later (see Getting LIEF below)
+- Capstone 5 (see Getting Capstone below)
 
 ### Getting LIEF
 
@@ -54,7 +59,20 @@ cp -R LIEF-1.0.0-Darwin-arm64/include LIEF-1.0.0-Darwin-arm64/lib \
     third_party/LIEF/
 ```
 
-[third_party/README.md](third_party/README.md) has the details.
+### Getting Capstone
+
+madamp builds against the Capstone in `third_party/capstone`, which isn't
+in git either. The simplest source is Homebrew, whose package includes the
+static library; copy its headers and `libcapstone.a`:
+
+```sh
+brew install capstone
+mkdir -p third_party/capstone/lib
+cp -R "$(brew --prefix capstone)/include" third_party/capstone/
+cp "$(brew --prefix capstone)/lib/libcapstone.a" third_party/capstone/lib/
+```
+
+[third_party/README.md](third_party/README.md) has the details for both.
 
 ### Build
 
@@ -63,11 +81,13 @@ cmake -B build
 cmake --build build -j
 ```
 
-CMake prints which SDK it uses (`-- LIEF 1.0.0: ...`). To use an SDK
-somewhere else, pass `-DLIEF_DIR=<sdk_path>/lib/cmake/LIEF` to the first
-command. CMake remembers the choice, so later builds only need `cmake
---build build -j`. To go back to `third_party/LIEF`, delete `build/` and
-configure again.
+CMake prints which SDK it uses (`-- LIEF 1.0.0: ...`), and which Capstone
+(`-- Capstone 5: ...`). To use an SDK somewhere else, pass
+`-DLIEF_DIR=<sdk_path>/lib/cmake/LIEF` to the first command, and for
+Capstone `-DCAPSTONE_DIR=<dir>`, for example
+`-DCAPSTONE_DIR=/opt/homebrew/opt/capstone`. CMake remembers these choices,
+so later builds only need `cmake --build build -j`. To go back to
+`third_party`, delete `build/` and configure again.
 
 The default build type is `RelWithDebInfo`. Pass `-DCMAKE_BUILD_TYPE=Debug`
 for a debug build.
@@ -105,6 +125,9 @@ binary. `./build/madamp --help` lists all the options.
 
 # Everything, plus a hexdump; -x alone shows only the hexdump
 ./build/madamp -a -x __cstring --arch arm64e /bin/ls
+
+# Disassemble a section or a function by its symbol
+./build/madamp -d __auth_stubs --arch arm64e /bin/ls
 
 # With colors
 ./build/madamp --color /bin/ls | less -R
